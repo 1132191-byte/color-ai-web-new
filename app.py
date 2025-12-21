@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Final Master Version (Professional Makeup Details)
+# Force Update: 2025-12-21 Final Master Version (Color-Specific Makeup Analysis)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -88,6 +88,10 @@ if uploaded_file:
                 best_tips = "✨ **顯色原理**：暖皮肌膚含有較多黃色素，與珊瑚、暖金等帶黃調的色彩能達成和諧共振，透過「同類色互襯」讓氣色顯得紅潤飽滿，散發如暖陽般的健康光澤感。"
                 avoid_tips = "❌ **避雷指南**：請避免帶有大量藍色基調的『冷灰』或『寶藍』，這些色彩會讓您的肌膚看起來瞬間發青、暗沉。過於螢光的『芭比粉』更會產生強烈的色偏，顯得妝感髒亂不乾淨。"
                 quick_makeup, makeup_tip = "日系元氣果汁妝感", "建議底妝以輕薄的奶油肌為主，腮紅著重於眼下大面積暈染，營造出溫暖、充滿活力且好親近的親和感。"
+                
+                # 暖色調專屬妝容解析內容
+                base_makeup_detail = "<b>1. 質地與色調：</b>建議選用帶黃調的<b>暖沙色或奶油色底妝</b>。質地以微光澤的奶油肌為佳，能與肌膚中的黃色素融合，避免妝感發灰。<br><b>2. 輪廓修飾：</b>修容色請避開偏灰冷的色彩，選擇帶有<b>土橘調的暖棕色</b>，能更自然地雕塑骨骼感而不顯髒。"
+                point_makeup_detail = "<b>1. 色彩應用：</b>眼影以大地色、肉桂色或珊瑚橘為主。加強睫毛根部的深棕色層次感，並使用金檳色的<b>臥蠶提亮</b>。<br><b>2. 唇腮統一：</b>腮紅與唇彩建議統一使用暖調（如杏色、泰奶色），營造出日系元氣感，讓整體五官看起來更溫柔和諧。"
             else:
                 theme_color, theme_bg = "#87CEEB", "#F5F9FF"
                 tone_type, tone_short = "冷色調 (Cool Tone)", "冷皮"
@@ -96,13 +100,17 @@ if uploaded_file:
                 best_tips = "✨ **顯色原理**：冷皮肌膚擁有藍色/粉色底色，與玫瑰粉、清透藍相遇時能產生『淨化作用』，壓制面部的暗黃感，襯托出肌膚的通透度與明亮度，打造高冷的氛圍美。"
                 avoid_tips = "❌ **避雷指南**：極度飽和的『鮮橘』或『亮黃』是冷皮的禁忌，這些高飽和的黃暖調會反襯出您肌膚底層的青紫色血管，讓整個人顯得非常疲憊、氣色蠟黃且無神。"
                 quick_makeup, makeup_tip = "韓式清透冷感妝容", "底妝強調極致的透亮與水光感，眼影建議使用低飽和的藕粉或灰粉色系，打造出如白開水般乾淨、高級且具備清冷氣質的妝效。"
+                
+                # 冷色調專屬妝容解析內容
+                base_makeup_detail = "<b>1. 質地與色調：</b>選用偏粉或<b>中性色調的亮白底妝</b>。建議使用半霧面質感，並利用<b>紫色飾底乳</b>校正面部蠟黃，增加冷白皮特有的通透感。<br><b>2. 輪廓修飾：</b>修容應選擇帶灰調的<b>影灰色</b>而非暖褐色，才能在冷皮上畫出真正的陰影感，讓面部輪廓更俐落。"
+                point_makeup_detail = "<b>1. 色彩應用：</b>眼影選用藕粉、灰紫或銀灰色調。睫毛強調根根分明的冷豔感，臥蠶提亮請選擇偏<b>粉白或珍珠色</b>。<br><b>2. 唇腮統一：</b>選用冷玫瑰、ベリー(莓果色)或豆沙粉，強調冷皮的清冷氣質，避免過於鮮豔的色彩遮蓋膚色的剔透感。"
 
             # --- 介面渲染 ---
             st.markdown(f"<style>.stApp {{ background-color: {theme_bg}; }}</style>", unsafe_allow_html=True)
             col_img, col_info = st.columns([1, 1.2])
             
             with col_img:
-                st.image(image, use_column_width=True) 
+                st.image(image, use_column_width=True)
             
             with col_info:
                 st.markdown(f"""
@@ -150,16 +158,14 @@ if uploaded_file:
                 st.info(f"💡 專業建議：{shape_advice}")
 
             with tab3:
-                st.markdown(f"#### 💄 精緻妝容技術解析")
+                st.markdown(f"#### 💄 針對「{tone_short}」設計的精緻妝容解析")
                 c1, c2 = st.columns(2)
                 with c1:
                     st.markdown(f"""
                     <div class='stCard'>
                         <b style='font-size:16px; color:#333;'>面部底妝與修容方案</b><br><br>
                         <span style='font-size:14px; color:#555; line-height:1.7;'>
-                            <b>1. 質地選擇：</b>建議選用質地細膩的<b>半霧面底妝</b>，能有效平衡臉部油光，避免因光影亂反射導致臉部視覺膨脹。<br>
-                            <b>2. 修容邏輯：</b>修容應著重於『深邃感』的建立。在咬肌轉折處與太陽穴外側輕掃灰棕色修容，並利用<b>提亮色</b>強調蘋果肌頂點與下巴，使臉型立體化。<br>
-                            <b>3. 腮紅位法：</b>腮紅是調整臉型關鍵。由蘋果肌高點往斜後方暈染，能拉長線條並提升整體氣色。
+                            {base_makeup_detail}
                         </span>
                     </div>
                     """, unsafe_allow_html=True)
@@ -168,9 +174,7 @@ if uploaded_file:
                     <div class='stCard'>
                         <b style='font-size:16px; color:#333;'>色彩應用與五官平衡</b><br><br>
                         <span style='font-size:14px; color:#555; line-height:1.7;'>
-                            <b>1. 眼部神采：</b>眼影建議選用<b>命定顯白色系</b>的低飽和延伸色。適度加強睫毛根部的層次感，搭配細膩的<b>臥蠶提亮</b>，能視覺放大雙眼並增加立體深邃度。<br>
-                            <b>2. 眉型雕塑：</b>眉毛應根據分析報告建議的弧度進行勾勒，保持自然的毛流感，能平衡上庭比例。<br>
-                            <b>3. 唇色美學：</b>選用與腮紅同色系的唇色，維持妝面色彩的一致性與高級感。邊緣微暈染的畫法更能修飾唇形，讓五官看起來更和諧。
+                            {point_makeup_detail}
                         </span>
                     </div>
                     """, unsafe_allow_html=True)
