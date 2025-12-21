@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Pro Makeup Consultant Version (Multi-Style Edition)
+# Force Update: 2025-12-21 Pro Makeup Consultant Version (Sidebar Style Edition)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -50,6 +50,8 @@ st.markdown("""
         .hex-code { font-size: 11px; text-align: center; color: #999; font-family: monospace; }
         .avoid-reason { background-color: #fff5f5; border-left: 5px solid #ff4b4b; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
         .best-reason { background-color: #f5fff5; border-left: 5px solid #28a745; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
+        .makeup-section { background-color: #fcfcfc; padding: 15px; border-radius: 12px; border: 1px solid #eee; margin-top: 10px; }
+        .makeup-title { color: #555; font-weight: bold; font-size: 15px; margin-bottom: 5px; display: block; border-bottom: 1px solid #eee; padding-bottom: 3px; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -110,14 +112,23 @@ if uploaded_file:
                     <b style="font-size: 18px;">{tone_type}</b><br>
                     <span class="badge" style="background-color: #555;">{face_shape.split(' ')[0]}</span> 
                     <b style="font-size: 18px;">{face_shape}</b>
-                    <div style="margin-top:15px; padding-top:15px; border-top: 1px solid #eee;">
-                        <p style="font-size: 14px; line-height: 1.6; color: #555;">{shape_advice}</p>
+                    <div style="margin-top:10px; padding-top:10px; border-top: 1px solid #eee;">
+                        <p style="font-size: 14px; line-height: 1.5; color: #555;">{shape_advice}</p>
+                    </div>
+                    
+                    <div class="makeup-section">
+                        <span class="makeup-title">💄 歐美妝建議</span>
+                        <p style="font-size: 13px; color: #666; margin-bottom: 8px;">強調深邃骨相，高挑挑眉與霧面唇膏。</p>
+                        <span class="makeup-title">💄 韓式妝建議</span>
+                        <p style="font-size: 13px; color: #666; margin-bottom: 8px;">追求清透水光感，平直自然眉與果凍唇。</p>
+                        <span class="makeup-title">💄 日式妝建議</span>
+                        <p style="font-size: 13px; color: #666; margin-bottom: 0;">透明感底妝，眼下腮紅與柔和粉嫩色調。</p>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
             st.divider()
-            tab1, tab2, tab3, tab4 = st.tabs(["🎨 色彩建議", "📐 造型思路", "💄 妝容解析", "💍 配飾指南"])
+            tab1, tab2, tab3, tab4 = st.tabs(["🎨 色彩建議", "📐 造型思路", "💄 詳細妝容解析", "💍 配飾指南"])
 
             with tab1:
                 st.markdown(f"#### ✅ 推薦顯白色 <small style='color:#888'>Best Colors</small>", unsafe_allow_html=True)
@@ -140,46 +151,19 @@ if uploaded_file:
                 st.markdown(f"<div class='avoid-reason'>{avoid_tips}</div>", unsafe_allow_html=True)
 
             with tab2:
-                st.markdown(f"#### ✨ 專屬風格建議")
-                st.write("根據您的臉型與膚色，以下是為您量身打造的變美方向：")
+                st.markdown(f"#### ✨ 造型思路總結")
+                st.write(f"根據您的{face_shape}與{tone_type}，建議保持妝面的乾淨度，並針對臉型缺點進行局部修容。")
                 st.info(f"💡 給您的專屬 Tip：{shape_advice}")
 
             with tab3:
-                st.markdown(f"#### 💄 各國妝容風格建議")
+                st.markdown(f"#### 💄 各國妝容風格深度解析")
                 m1, m2, m3 = st.columns(3)
-                
                 with m1:
-                    st.markdown(f"""
-                    <div class='stCard' style='min-height: 350px;'>
-                        <b style='color:#E67E22; font-size:18px;'>欧美妝 (Western)</b><br><br>
-                        <b>特點：</b>強烈輪廓感與力量感。<br>
-                        <b>底妝：</b>全霧面持久底妝。<br>
-                        <b>眉眼：</b>高挑挑眉，深邃眼窩修容，誇張睫毛。<br>
-                        <b>唇妝：</b>飽滿唇線，霧面土色或深紅。
-                    </div>
-                    """, unsafe_allow_html=True)
-                
+                    st.markdown(f"<div class='stCard'><b>欧美妝 (Western)</b><br><br>注重修容與提亮的強烈對比，適合想要展現成熟氣場的場合。</div>", unsafe_allow_html=True)
                 with m2:
-                    st.markdown(f"""
-                    <div class='stCard' style='min-height: 350px;'>
-                        <b style='color:#9B59B6; font-size:18px;'>韓式妝 (Korean)</b><br><br>
-                        <b>特點：</b>水嫩剔透，視覺減齡。<br>
-                        <b>底妝：</b>奶油水光肌，強調澎潤感。<br>
-                        <b>眉眼：</b>平直眉或自然原生眉，清透臥蠶。<br>
-                        <b>唇妝：</b>果凍感唇釉，咬唇或漸層畫法。
-                    </div>
-                    """, unsafe_allow_html=True)
-                
+                    st.markdown(f"<div class='stCard'><b>韓式妝 (Korean)</b><br><br>強調『偽素顏』的清透底妝，是日常通勤與約會的首選。</div>", unsafe_allow_html=True)
                 with m3:
-                    st.markdown(f"""
-                    <div class='stCard' style='min-height: 350px;'>
-                        <b style='color:#FF69B4; font-size:18px;'>日式妝 (Japanese)</b><br><br>
-                        <b>特點：</b>溫柔透明，無辜氛圍。<br>
-                        <b>底妝：</b>清透半霧面，保留肌膚質感。<br>
-                        <b>眉眼：</b>柔和淺色眉，大面積眼下腮紅。<br>
-                        <b>唇妝：</b>潤澤感粉嫩色系，強調自然唇形。
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown(f"<div class='stCard'><b>日式妝 (Japanese)</b><br><br>強調氛圍感與柔和色彩，能極大程度修飾面部硬朗線條。</div>", unsafe_allow_html=True)
 
             with tab4:
                 metal = "金色、黃銅、玫瑰金" if is_warm else "銀色、白金、珍珠"
