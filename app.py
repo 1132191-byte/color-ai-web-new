@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Final Master Version (Professional Tip Enrichment)
+# Force Update: 2025-12-21 Final Master Version (Professional Makeup Details)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -153,9 +153,27 @@ if uploaded_file:
                 st.markdown(f"#### 💄 精緻妝容技術解析")
                 c1, c2 = st.columns(2)
                 with c1:
-                    st.markdown(f"<div class='stCard'><b>面部底妝與修容方案</b><br>建議選擇質地細膩的半霧面底妝，避免臉部產生過多油光導致臉型膨脹。修容著重在視覺陰影區，建立深邃感。</div>", unsafe_allow_html=True)
+                    st.markdown(f"""
+                    <div class='stCard'>
+                        <b style='font-size:16px; color:#333;'>面部底妝與修容方案</b><br><br>
+                        <span style='font-size:14px; color:#555; line-height:1.7;'>
+                            <b>1. 質地選擇：</b>建議選用質地細膩的<b>半霧面底妝</b>，能有效平衡臉部油光，避免因光影亂反射導致臉部視覺膨脹。<br>
+                            <b>2. 修容邏輯：</b>修容應著重於『深邃感』的建立。在咬肌轉折處與太陽穴外側輕掃灰棕色修容，並利用<b>提亮色</b>強調蘋果肌頂點與下巴，使臉型立體化。<br>
+                            <b>3. 腮紅位法：</b>腮紅是調整臉型關鍵。由蘋果肌高點往斜後方暈染，能拉長線條並提升整體氣色。
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
                 with c2:
-                    st.markdown(f"<div class='stCard'><b>色彩應用與五官平衡</b><br>眼影與唇色應選用同一色系以維持妝面整潔感。對於您的五官特徵，適度加強睫毛根部與臥蠶能讓眼神更深邃。</div>", unsafe_allow_html=True)
+                    st.markdown(f"""
+                    <div class='stCard'>
+                        <b style='font-size:16px; color:#333;'>色彩應用與五官平衡</b><br><br>
+                        <span style='font-size:14px; color:#555; line-height:1.7;'>
+                            <b>1. 眼部神采：</b>眼影建議選用<b>命定顯白色系</b>的低飽和延伸色。適度加強睫毛根部的層次感，搭配細膩的<b>臥蠶提亮</b>，能視覺放大雙眼並增加立體深邃度。<br>
+                            <b>2. 眉型雕塑：</b>眉毛應根據分析報告建議的弧度進行勾勒，保持自然的毛流感，能平衡上庭比例。<br>
+                            <b>3. 唇色美學：</b>選用與腮紅同色系的唇色，維持妝面色彩的一致性與高級感。邊緣微暈染的畫法更能修飾唇形，讓五官看起來更和諧。
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
 
             with tab4:
                 st.markdown("#### 💍 適合您的首飾與眼鏡框架")
