@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Final Master Version (Integrated Avoid Colors)
+# Force Update: 2025-12-21 Final Master Version (Fixed Accessory Tab & Report Card)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -26,7 +26,7 @@ def analyze_face_shape(landmarks, width, height):
     if ratio_len_wid > 1.55:
         return "長臉 (Long)", "為了縮短視覺長度，建議利用瀏海遮蓋額頭，眉型畫寬、畫平。腮紅從蘋果肌向耳側平掃，能有效平衡比例。"
     elif ratio_len_wid < 1.15:
-        if ratio_jaw_cheek > 0.85:
+        if ratio_jaw_cheek > 0.85: # 稍微調降門檻以更容易偵測方圓臉
             return "方圓臉 (Soft Square)", "重點在於柔化下顎線條。建議眉峰帶點弧度，修容著重在腮幫子處，營造柔和且具高級感的氛圍。"
         else:
             return "圓臉 (Round)", "要打破圓潤感，建議加強面中T字部位提亮。眉毛要有明顯眉峰，腮紅由太陽穴向嘴角斜刷。"
@@ -50,7 +50,7 @@ st.markdown("""
         .hex-code { font-size: 11px; text-align: center; color: #999; font-family: monospace; }
         .avoid-reason { background-color: #fff5f5; border-left: 5px solid #ff4b4b; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
         .best-reason { background-color: #f5fff5; border-left: 5px solid #28a745; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
-        .info-sub-card { margin-top: 12px; padding: 12px; border-radius: 8px; border: 1px solid #eee; background-color: #fafafa; }
+        .makeup-card { margin-top: 15px; padding: 12px; border-radius: 8px; border: 1px solid #eee; background-color: #fafafa; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -59,6 +59,7 @@ st.title("✨ AI 個人形象顧問")
 with st.sidebar:
     st.header("⚙️ 設定")
     threshold = st.slider("冷暖分界值", 135, 155, 143)
+    st.info("💡 提示：請使用正面環境光照片，避免強烈陰影導致臉型誤判。")
 
 uploaded_file = st.file_uploader("📸 選擇照片", type=['jpg', 'png', 'jpeg'], label_visibility="collapsed")
 
@@ -84,16 +85,16 @@ if uploaded_file:
                 tone_type, tone_short = "暖色調 (Warm)", "暖皮"
                 best_colors = [("#FF8C69", "珊瑚橘"), ("#E1AD01", "芥末黃"), ("#9F3025", "磚紅色"), ("#708238", "橄欖綠")]
                 avoid_colors = [("#808080", "冷灰"), ("#4169E1", "正藍"), ("#FF00FF", "芭比粉")]
-                avoid_text = "冷灰色、正藍色、芭比粉"
                 best_tips = "✨ 暖色調能與您肌膚的黃色基調融合，讓氣色瞬間紅潤、顯現健康光澤。"
+                avoid_tips = "❌ 冷感太強的色調會讓暖皮看起來暗沉蠟黃，應盡量避免。"
                 quick_makeup, makeup_tip = "日系元氣果汁妝", "建議使用暖橘或杏色調，大面積腮紅暈染。"
             else:
                 theme_color, theme_bg = "#87CEEB", "#F5F9FF"
                 tone_type, tone_short = "冷色調 (Cool)", "冷皮"
                 best_colors = [("#F7C5D0", "玫瑰粉"), ("#87CEEB", "天空藍"), ("#B57EDC", "薰衣草"), ("#800020", "波爾多紅")]
                 avoid_colors = [("#FFA500", "鮮橘"), ("#FFDB58", "亮黃"), ("#C19A6B", "土黃")]
-                avoid_text = "鮮橘色、亮黃色、土黃色"
                 best_tips = "✨ 冷色調能襯托出肌膚的通透度與明亮度，營造出優雅清冷的氛圍。"
+                avoid_tips = "❌ 暖黃色調會遮蓋冷皮的剔透特質，顯得臉部發灰。"
                 quick_makeup, makeup_tip = "韓式清透冷感妝", "強調水光肌，搭配低飽和玫瑰藕粉色系。"
 
             # --- 介面渲染 ---
@@ -111,21 +112,13 @@ if uploaded_file:
                     <b style="font-size: 18px;">{tone_type}</b><br>
                     <span class="badge" style="background-color: #555;">{face_shape.split(' ')[0]}</span> 
                     <b style="font-size: 18px;">{face_shape}</b>
-                    
-                    <div class="info-sub-card" style="border-left: 4px solid {theme_color};">
-                        <b style="color: #333; font-size: 14px;">💄 適合您的妝容</b><br>
-                        <span style="font-size: 13px; color: {theme_color}; font-weight: bold;">{quick_makeup}</span><br>
-                        <p style="font-size: 12px; color: #666; margin: 0;">{makeup_tip}</p>
-                    </div>
-
-                    <div class="info-sub-card" style="border-left: 4px solid #ff4b4b; background-color: #fffafa;">
-                        <b style="color: #333; font-size: 14px;">❌ 應避免的顏色</b><br>
-                        <span style="font-size: 13px; color: #ff4b4b; font-weight: bold;">{avoid_text}</span><br>
-                        <p style="font-size: 12px; color: #666; margin: 0;">這些色調容易讓您的膚色顯得暗沈或蠟黃。</p>
-                    </div>
-                    
                     <div style="margin-top:10px; padding-top:10px; border-top: 1px solid #eee;">
-                        <p style="font-size: 13px; line-height: 1.5; color: #777;">{shape_advice}</p>
+                        <p style="font-size: 14px; line-height: 1.6; color: #555;">{shape_advice}</p>
+                    </div>
+                    <div class="makeup-card" style="border-left: 5px solid {theme_color};">
+                        <b style="color: #333; font-size: 15px;">💄 適合您的妝容</b><br>
+                        <span style="font-size: 14px; color: {theme_color}; font-weight: bold;">{quick_makeup}</span><br>
+                        <p style="font-size: 13px; color: #666; margin: 0;">{makeup_tip}</p>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -140,35 +133,40 @@ if uploaded_file:
                     with cols[i]:
                         st.markdown(f"<div style='background-color: {hex_code}; height: 70px; border-radius: 12px;'></div>", unsafe_allow_html=True)
                         st.markdown(f"<p class='color-tip'>{name}</p><p class='hex-code'>{hex_code}</p>", unsafe_allow_html=True)
-                st.markdown(f"#### ❌ 避雷地雷色", unsafe_allow_html=True)
-                cols2 = st.columns(3)
-                for i, (hex_code, name) in enumerate(avoid_colors):
-                    with cols2[i]:
-                        st.markdown(f"<div style='background-color: {hex_code}; height: 70px; border-radius: 12px; opacity:0.8;'></div>", unsafe_allow_html=True)
-                        st.markdown(f"<p class='color-tip'>{name}</p><p class='hex-code'>{hex_code}</p>", unsafe_allow_html=True)
+                st.markdown(f"<div class='best-reason'>{best_tips}</div>", unsafe_allow_html=True)
 
             with tab2:
                 st.markdown(f"#### ✨ 專屬變美思路")
+                st.write(f"針對您的 **{face_shape}**，造型核心在於調整視覺重心。")
                 st.info(f"💡 造型小提示：{shape_advice}")
 
             with tab3:
-                st.markdown(f"#### 💄 妝容細節解析")
-                st.write("底妝建議追求自然質感，避免過於厚重的粉感。眼妝部分則可選用同色系的消腫色。")
+                st.markdown(f"#### 💄 詳細妝容思路解析")
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.markdown(f"<div class='stCard'><b>底妝與修容</b><br>建議選用與脖子膚色一致的底妝，並在面中三角區做重點提亮。</div>", unsafe_allow_html=True)
+                with c2:
+                    st.markdown(f"<div class='stCard'><b>眼影與唇彩</b><br>選用低飽和度色彩，唇妝建議畫出自然漸層感。</div>", unsafe_allow_html=True)
 
             with tab4:
                 st.markdown("#### 💍 適合您的配飾與眼鏡")
-                metal = "金色、玫瑰金" if is_warm else "銀色、白金"
+                metal = "金色、玫瑰金、黃銅材質" if is_warm else "銀色、白金、冷光珍珠"
+                metal_tips = "暖皮適合溫暖的金屬光澤。" if is_warm else "冷皮適合清冷的銀亮質感。"
+                
                 if "方" in face_shape:
-                    glasses = "大圓框、水滴形框"
+                    glasses = "大圓框、水滴形框"; g_tips = "用圓潤線條來平衡下顎的硬感。"
                 elif "圓" in face_shape:
-                    glasses = "方框、貓眼框"
+                    glasses = "方框、貓眼框"; g_tips = "利用鏡框稜角來增加臉部線條感。"
+                elif "長" in face_shape:
+                    glasses = "寬大框、大方框"; g_tips = "增加橫向面積以截斷視覺長度。"
                 else:
-                    glasses = "多邊形框、各式流行框型"
+                    glasses = "多邊形框、各式流行框型"; g_tips = "標準臉型幾乎不挑框型，可大膽嘗試。"
 
                 ac1, ac2 = st.columns(2)
                 with ac1:
-                    st.markdown(f"<div class='stCard'><b>飾品材質</b><br><b style='color:{theme_color};'>{metal}</b></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='stCard'><b>飾品材質</b><br><b style='color:{theme_color};'>{metal}</b><br><br>{metal_tips}</div>", unsafe_allow_html=True)
                 with ac2:
-                    st.markdown(f"<div class='stCard'><b>眼鏡推薦</b><br><b>{glasses}</b></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='stCard'><b>眼鏡推薦</b><br><b>{glasses}</b><br><br>{g_tips}</div>", unsafe_allow_html=True)
+
         else:
-            st.error("❌ 無法偵測到臉部，請更換正面清晰的照片。")
+            st.error("❌ 無法偵測到臉部，請更換光線均勻的照片。")
