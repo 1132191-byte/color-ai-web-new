@@ -169,3 +169,35 @@ if uploaded_file:
                         </span>
                     </div>
                     """, unsafe_allow_html=True)
+                with c2:
+                    st.markdown(f"""
+                    <div class='stCard'>
+                        <b style='font-size:16px; color:#333;'>色彩應用與五官平衡</b><br><br>
+                        <span style='font-size:14px; color:#555; line-height:1.7;'>
+                            {point_makeup_detail}
+                        </span>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+            with tab4:
+                st.markdown("#### 💍 適合您的首飾與眼鏡框架")
+                metal = "金色系 (Gold)、玫瑰金、霧面黃銅材質" if is_warm else "銀色系 (Silver)、白金、極光珍珠材質"
+                metal_tips = "暖色肌膚在溫潤金屬光的照映下能增加高級感，讓皮膚看起來更有彈性。" if is_warm else "冷調肌膚搭配清冷金屬色能突顯膚質的純淨與高貴感。"
+                
+                if "方" in face_shape:
+                    glasses = "大尺寸圓框、貓眼框或飛行員鏡框"; g_tips = "利用鏡框的曲率來中和面部骨感的銳利感，使臉型呈現完美的流線美。"
+                elif "圓" in face_shape:
+                    glasses = "稜角分明的方框、幾何型框架或貓眼框"; g_tips = "利用眼鏡的直線條來人為製造稜角，打破圓臉的沉重感，增添俐落度。"
+                elif "長" in face_shape:
+                    glasses = "寬度顯著的大方框、寬版粗框眼鏡"; g_tips = "選擇鏡框高度較大的款式可以截斷長臉的縱向延伸，在視覺上縮短臉部比例。"
+                else:
+                    glasses = "多邊形框架、各式前衛流行款式皆可"; g_tips = "您的臉型屬於百搭款式，可以大膽嘗試各類實驗性設計框架，根據穿搭風格隨意變換。"
+
+                ac1, ac2 = st.columns(2)
+                with ac1:
+                    st.markdown(f"<div class='stCard'><b>最佳金屬材質建議</b><br><b style='color:{theme_color}; font-size:16px;'>{metal}</b><br><br>{metal_tips}</div>", unsafe_allow_html=True)
+                with ac2:
+                    st.markdown(f"<div class='stCard'><b>顯瘦眼鏡款式指南</b><br><b style='font-size:16px;'>{glasses}</b><br><br>{g_tips}</div>", unsafe_allow_html=True)
+
+        else:
+            st.error("❌ 無法偵測到臉部特徵。請上傳一張正面、清晰、無遮擋且光源均勻的人像照片。")
