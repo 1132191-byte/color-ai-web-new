@@ -1,3 +1,4 @@
+# Force Update: 2025-12-21 Fix Image Bug
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -6,7 +7,7 @@ import math
 from PIL import Image, ImageOps
 
 # ==========================================
-# 0. 初始化 MediaPipe 繪圖工具 (重要修復)
+# 0. 初始化 MediaPipe 繪圖工具
 # ==========================================
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -146,14 +147,14 @@ else:
             idx = 117 
             cx, cy = int(face_landmarks.landmark[idx].x * w), int(face_landmarks.landmark[idx].y * h)
             
-            # --- 【修復重點 1 & 2】繪圖區 ---
+            # --- 【關鍵修復區】繪圖 ---
             annotated_image = image.copy()
             
             # (A) 畫出膚色取樣點
             cv2.circle(annotated_image, (cx, cy), 15, (255, 255, 255), 2)
             cv2.circle(annotated_image, (cx, cy), 13, (255, 255, 255), -1) 
             
-            # (B) 畫出臉部網格 (注意：這裡是直接修改 annotated_image，不要用變數去接回傳值)
+            # (B) 畫出臉部網格 (絕對不能加 annotated_image = ...)
             mp_drawing.draw_landmarks(
                 image=annotated_image,
                 landmark_list=face_landmarks,
@@ -240,7 +241,7 @@ else:
                 col_img, col_info = st.columns([1, 1.5])
                 
                 with col_img:
-                    # 【修復重點 2】顯示修正後的圖片 (確保是 numpy array 且內容存在)
+                    # 顯示圖片 (現在 annotated_image 不會是 None 了)
                     st.image(annotated_image, use_container_width=True)
                 
                 with col_info:
