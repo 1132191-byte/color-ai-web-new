@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Final Master Version (Fixed Accessory Tab & Report Card)
+# Force Update: 2025-12-21 Final Master Version (Integrated Best & Avoid Colors)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -134,6 +134,15 @@ if uploaded_file:
                         st.markdown(f"<div style='background-color: {hex_code}; height: 70px; border-radius: 12px;'></div>", unsafe_allow_html=True)
                         st.markdown(f"<p class='color-tip'>{name}</p><p class='hex-code'>{hex_code}</p>", unsafe_allow_html=True)
                 st.markdown(f"<div class='best-reason'>{best_tips}</div>", unsafe_allow_html=True)
+                
+                st.write("")
+                st.markdown(f"#### ❌ 避雷地雷色", unsafe_allow_html=True)
+                cols2 = st.columns(3)
+                for i, (hex_code, name) in enumerate(avoid_colors):
+                    with cols2[i]:
+                        st.markdown(f"<div style='background-color: {hex_code}; height: 70px; border-radius: 12px; opacity: 0.8;'></div>", unsafe_allow_html=True)
+                        st.markdown(f"<p class='color-tip'>{name}</p><p class='hex-code'>{hex_code}</p>", unsafe_allow_html=True)
+                st.markdown(f"<div class='avoid-reason'>{avoid_tips}</div>", unsafe_allow_html=True)
 
             with tab2:
                 st.markdown(f"#### ✨ 專屬變美思路")
