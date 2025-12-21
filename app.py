@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Pro Makeup Consultant Version
+# Force Update: 2025-12-21 Pro Makeup Consultant Version (With Color Hex & Tips)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -46,8 +46,10 @@ st.markdown("""
         html, body, .stApp, h1, h2, h3, h4, h5, h6, p, div, span, li { color: #333333 !important; font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
         .stCard { background-color: rgba(255, 255, 255, 0.98); padding: 25px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .badge { display: inline-block; padding: 5px 15px; border-radius: 25px; font-size: 14px; font-weight: 600; color: white !important; margin-bottom: 10px; }
-        .color-tip { font-size: 12px; text-align: center; color: #777; margin-top: 8px; font-weight: 500; }
-        .tab-content { padding-top: 20px; }
+        .color-tip { font-size: 13px; text-align: center; color: #444; margin-top: 8px; font-weight: 600; }
+        .hex-code { font-size: 11px; text-align: center; color: #999; font-family: monospace; }
+        .avoid-reason { background-color: #fff5f5; border-left: 5px solid #ff4b4b; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
+        .best-reason { background-color: #f5fff5; border-left: 5px solid #28a745; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -85,11 +87,15 @@ if uploaded_file:
                 tone_type, tone_short = "暖色調 (Warm)", "暖皮"
                 best_colors = [("#FF8C69", "珊瑚橘"), ("#E1AD01", "芥末黃"), ("#9F3025", "磚紅色"), ("#708238", "橄欖綠")]
                 avoid_colors = [("#808080", "冷灰"), ("#4169E1", "正藍"), ("#FF00FF", "芭比粉")]
+                best_tips = "✨ 暖色調能與您肌膚中的黃色基調融合，讓氣色瞬間紅潤、顯現健康光澤。"
+                avoid_tips = "❌ 這些高冷或帶螢光感的色調會與您的膚色產生衝突，容易顯得臉部發灰、暗沉蠟黃。"
             else:
                 theme_color, theme_bg = "#87CEEB", "#F5F9FF"
                 tone_type, tone_short = "冷色調 (Cool)", "冷皮"
                 best_colors = [("#F7C5D0", "玫瑰粉"), ("#87CEEB", "天空藍"), ("#B57EDC", "薰衣草"), ("#800020", "波爾多紅")]
                 avoid_colors = [("#FFA500", "鮮橘"), ("#FFDB58", "亮黃"), ("#C19A6B", "土黃")]
+                best_tips = "✨ 冷色調能襯托出肌膚的通透度與明亮度，營造出一種優雅清冷的氛圍感。"
+                avoid_tips = "❌ 帶有大量黃橘色調的飽和色會反襯出您肌膚的蠟黃感，遮蓋原本剔透的冷皮特質。"
 
             # --- 妝容具體內容 (專業彩妝師建議) ---
             if "方臉" in face_shape or "長臉" in face_shape:
@@ -114,7 +120,7 @@ if uploaded_file:
                 makeup_base = "<b>底妝：</b>無瑕的半霧面質感。在面中三角區做重點提亮。<br><b>修容：</b>自然的鼻影過度與側影，重點修飾出下巴的線條感。"
                 makeup_point = "<b>眼影：</b>加強大顆粒的偏光亮片點綴在眼窩中央。睫毛要強調『束狀感』。<br><b>唇膏：</b>飽滿的鏡面純釉。草莓粉或櫻桃色都能完美襯托您的氣場。"
 
-            # ================= 介面顯示 =================
+            # =================介面顯示 =================
             st.markdown(f"<style>.stApp {{ background-color: {theme_bg}; }}</style>", unsafe_allow_html=True)
             col_img, col_info = st.columns([1, 1.2])
             with col_img:
@@ -143,6 +149,9 @@ if uploaded_file:
                     with cols[i]:
                         st.markdown(f"<div style='background-color: {hex_code}; height: 70px; border-radius: 12px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);'></div>", unsafe_allow_html=True)
                         st.markdown(f"<p class='color-tip'>{name}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p class='hex-code'>{hex_code}</p>", unsafe_allow_html=True)
+                st.markdown(f"<div class='best-reason'>{best_tips}</div>", unsafe_allow_html=True)
+
                 st.write("")
                 st.markdown(f"#### ❌ 避雷地雷色 <small style='color:#888'>Worst Colors</small>", unsafe_allow_html=True)
                 cols2 = st.columns(3)
@@ -150,6 +159,8 @@ if uploaded_file:
                     with cols2[i]:
                         st.markdown(f"<div style='background-color: {hex_code}; height: 70px; border-radius: 12px; opacity: 0.8;'></div>", unsafe_allow_html=True)
                         st.markdown(f"<p class='color-tip'>{name}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p class='hex-code'>{hex_code}</p>", unsafe_allow_html=True)
+                st.markdown(f"<div class='avoid-reason'>{avoid_tips}</div>", unsafe_allow_html=True)
 
             with tab2:
                 st.markdown(f"#### ✨ 專屬風格建議：{style_name}")
