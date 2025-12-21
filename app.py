@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Pro Makeup Consultant Version (With Color Hex & Tips)
+# Force Update: 2025-12-21 Pro Makeup Consultant Version (Multi-Style Edition)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -97,29 +97,6 @@ if uploaded_file:
                 best_tips = "✨ 冷色調能襯托出肌膚的通透度與明亮度，營造出一種優雅清冷的氛圍感。"
                 avoid_tips = "❌ 帶有大量黃橘色調的飽和色會反襯出您肌膚的蠟黃感，遮蓋原本剔透的冷皮特質。"
 
-            # --- 妝容具體內容 (專業彩妝師建議) ---
-            if "方臉" in face_shape or "長臉" in face_shape:
-                style_name = "氣場全開的歐美輕混血感"
-                style_desc = "您擁有非常有張力的輪廓。化妝時不要試圖『掩蓋』骨骼，而是要利用它們，打造出具有高級感的層次。"
-                makeup_base = "<b>底妝：</b>追求微霧面的絲絨感。比起大面積修容，更建議用深淺不同的粉底液進行『骨骼雕塑』。<br><b>修容：</b>重點加強顴骨下方的陰影，並在下顎線轉角處做暈染，讓臉部線條更有神采。"
-                makeup_point = "<b>眼影：</b>大膽嘗試大地色系的截斷式畫法。眉毛建議畫出眉峰分明的挑眉。<br><b>唇膏：</b>選擇霧面質地的裸土色或紅棕色，甚至可以稍微畫出唇緣，增加視覺份量。"
-            elif "圓臉" in face_shape:
-                if is_warm:
-                    style_name = "元氣滿滿的日系果汁感"
-                    style_desc = "圓臉配暖皮是天生的親切感代名詞。妝容重點在於『清透感』與『大面積腮紅』，打造出溫柔好親近的氣質。"
-                    makeup_base = "<b>底妝：</b>輕薄透亮的奶油肌。保留皮膚的原生質感，甚至一點點雀斑都會顯得自然。<br><b>腮紅：</b>這是靈魂。選擇珊瑚或杏桃色，在眼下與鼻頭處做圓向暈染，看起來像被太陽曬過的紅潤。"
-                    makeup_point = "<b>眼影：</b>使用低飽和的暖大地色。重點在於強調纖長分明的睫毛。<br><b>唇膏：</b>透明感極強的水光唇釉，或是帶橘調的變色唇膏，打造飽滿豐潤感。"
-                else:
-                    style_name = "冷感氛圍的韓式開水妝"
-                    style_desc = "圓臉配冷皮最適合走清冷、精緻的路線。減少顏色的複雜度，重點在於讓皮膚顯得極致乾淨、剔透。"
-                    makeup_base = "<b>底妝：</b>乾淨的水光感底妝。建議使用紫色飾底乳校正黃氣。<br><b>腮紅：</b>選用牛奶粉或淡紫色的『膨脹色』腮紅，打在面中蘋果肌處，讓臉型瞬間立體消腫。"
-                    makeup_point = "<b>眼影：</b>消腫色眼影（如藕粉色）平鋪。強調臥蠶的立體度。<br><b>唇膏：</b>帶有漿果調或玫瑰色的染唇液，由內向外暈染成自然的咬唇妝。"
-            else:
-                style_name = "精緻迷人的韓系女團風"
-                style_desc = "您的臉型比例極佳，是典型的上鏡臉。妝容的核心在於強調『視覺中心點』，讓五官更加明豔動人。"
-                makeup_base = "<b>底妝：</b>無瑕的半霧面質感。在面中三角區做重點提亮。<br><b>修容：</b>自然的鼻影過度與側影，重點修飾出下巴的線條感。"
-                makeup_point = "<b>眼影：</b>加強大顆粒的偏光亮片點綴在眼窩中央。睫毛要強調『束狀感』。<br><b>唇膏：</b>飽滿的鏡面純釉。草莓粉或櫻桃色都能完美襯托您的氣場。"
-
             # =================介面顯示 =================
             st.markdown(f"<style>.stApp {{ background-color: {theme_bg}; }}</style>", unsafe_allow_html=True)
             col_img, col_info = st.columns([1, 1.2])
@@ -163,17 +140,46 @@ if uploaded_file:
                 st.markdown(f"<div class='avoid-reason'>{avoid_tips}</div>", unsafe_allow_html=True)
 
             with tab2:
-                st.markdown(f"#### ✨ 專屬風格建議：{style_name}")
-                st.write(style_desc)
+                st.markdown(f"#### ✨ 專屬風格建議")
+                st.write("根據您的臉型與膚色，以下是為您量身打造的變美方向：")
                 st.info(f"💡 給您的專屬 Tip：{shape_advice}")
 
             with tab3:
-                st.markdown(f"#### 💄 變美思路解析")
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.markdown(f"<div class='stCard'>{makeup_base}</div>", unsafe_allow_html=True)
-                with c2:
-                    st.markdown(f"<div class='stCard'>{makeup_point}</div>", unsafe_allow_html=True)
+                st.markdown(f"#### 💄 各國妝容風格建議")
+                m1, m2, m3 = st.columns(3)
+                
+                with m1:
+                    st.markdown(f"""
+                    <div class='stCard' style='min-height: 350px;'>
+                        <b style='color:#E67E22; font-size:18px;'>欧美妝 (Western)</b><br><br>
+                        <b>特點：</b>強烈輪廓感與力量感。<br>
+                        <b>底妝：</b>全霧面持久底妝。<br>
+                        <b>眉眼：</b>高挑挑眉，深邃眼窩修容，誇張睫毛。<br>
+                        <b>唇妝：</b>飽滿唇線，霧面土色或深紅。
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with m2:
+                    st.markdown(f"""
+                    <div class='stCard' style='min-height: 350px;'>
+                        <b style='color:#9B59B6; font-size:18px;'>韓式妝 (Korean)</b><br><br>
+                        <b>特點：</b>水嫩剔透，視覺減齡。<br>
+                        <b>底妝：</b>奶油水光肌，強調澎潤感。<br>
+                        <b>眉眼：</b>平直眉或自然原生眉，清透臥蠶。<br>
+                        <b>唇妝：</b>果凍感唇釉，咬唇或漸層畫法。
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with m3:
+                    st.markdown(f"""
+                    <div class='stCard' style='min-height: 350px;'>
+                        <b style='color:#FF69B4; font-size:18px;'>日式妝 (Japanese)</b><br><br>
+                        <b>特點：</b>溫柔透明，無辜氛圍。<br>
+                        <b>底妝：</b>清透半霧面，保留肌膚質感。<br>
+                        <b>眉眼：</b>柔和淺色眉，大面積眼下腮紅。<br>
+                        <b>唇妝：</b>潤澤感粉嫩色系，強調自然唇形。
+                    </div>
+                    """, unsafe_allow_html=True)
 
             with tab4:
                 metal = "金色、黃銅、玫瑰金" if is_warm else "銀色、白金、珍珠"
