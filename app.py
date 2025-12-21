@@ -1,4 +1,4 @@
-# Force Update: 2025-12-21 Pro Makeup Consultant Version (With Color Hex & Tips)
+# Force Update: 2025-12-21 Final Integrated Edition (Makeup in Report Card)
 import streamlit as st
 import cv2
 import mediapipe as mp
@@ -50,6 +50,15 @@ st.markdown("""
         .hex-code { font-size: 11px; text-align: center; color: #999; font-family: monospace; }
         .avoid-reason { background-color: #fff5f5; border-left: 5px solid #ff4b4b; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
         .best-reason { background-color: #f5fff5; border-left: 5px solid #28a745; padding: 10px; margin-top: 15px; font-size: 14px; color: #666; }
+        
+        /* 妝容區塊樣式 */
+        .makeup-card {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            background-color: #fafafa;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -81,7 +90,7 @@ if uploaded_file:
             
             is_warm = np.mean(cv2.cvtColor(cheek_crop, cv2.COLOR_RGB2LAB)[:,:,2]) > threshold if cheek_crop.size > 0 else True
             
-            # --- 風格與色號設定 ---
+            # --- 色彩與妝容設定 ---
             if is_warm:
                 theme_color, theme_bg = "#FF8C69", "#FFF8F5"
                 tone_type, tone_short = "暖色調 (Warm)", "暖皮"
@@ -89,6 +98,9 @@ if uploaded_file:
                 avoid_colors = [("#808080", "冷灰"), ("#4169E1", "正藍"), ("#FF00FF", "芭比粉")]
                 best_tips = "✨ 暖色調能與您肌膚中的黃色基調融合，讓氣色瞬間紅潤、顯現健康光澤。"
                 avoid_tips = "❌ 這些高冷或帶螢光感的色調會與您的膚色產生衝突，容易顯得臉部發灰、暗沉蠟黃。"
+                # 專屬妝容建議
+                quick_makeup = "日系元氣果汁妝"
+                makeup_tip = "建議使用暖橘或杏色調，大面積腮紅暈染出健康好氣色。"
             else:
                 theme_color, theme_bg = "#87CEEB", "#F5F9FF"
                 tone_type, tone_short = "冷色調 (Cool)", "冷皮"
@@ -96,35 +108,17 @@ if uploaded_file:
                 avoid_colors = [("#FFA500", "鮮橘"), ("#FFDB58", "亮黃"), ("#C19A6B", "土黃")]
                 best_tips = "✨ 冷色調能襯托出肌膚的通透度與明亮度，營造出一種優雅清冷的氛圍感。"
                 avoid_tips = "❌ 帶有大量黃橘色調的飽和色會反襯出您肌膚的蠟黃感，遮蓋原本剔透的冷皮特質。"
+                # 專屬妝容建議
+                quick_makeup = "韓系清透冷感妝"
+                makeup_tip = "強調極致乾淨的水光肌，搭配低飽和的玫瑰或消腫藕粉色系。"
 
-            # --- 妝容具體內容 (專業彩妝師建議) ---
-            if "方臉" in face_shape or "長臉" in face_shape:
-                style_name = "氣場全開的歐美輕混血感"
-                style_desc = "您擁有非常有張力的輪廓。化妝時不要試圖『掩蓋』骨骼，而是要利用它們，打造出具有高級感的層次。"
-                makeup_base = "<b>底妝：</b>追求微霧面的絲絨感。比起大面積修容，更建議用深淺不同的粉底液進行『骨骼雕塑』。<br><b>修容：</b>重點加強顴骨下方的陰影，並在下顎線轉角處做暈染，讓臉部線條更有神采。"
-                makeup_point = "<b>眼影：</b>大膽嘗試大地色系的截斷式畫法。眉毛建議畫出眉峰分明的挑眉。<br><b>唇膏：</b>選擇霧面質地的裸土色或紅棕色，甚至可以稍微畫出唇緣，增加視覺份量。"
-            elif "圓臉" in face_shape:
-                if is_warm:
-                    style_name = "元氣滿滿的日系果汁感"
-                    style_desc = "圓臉配暖皮是天生的親切感代名詞。妝容重點在於『清透感』與『大面積腮紅』，打造出溫柔好親近的氣質。"
-                    makeup_base = "<b>底妝：</b>輕薄透亮的奶油肌。保留皮膚的原生質感，甚至一點點雀斑都會顯得自然。<br><b>腮紅：</b>這是靈魂。選擇珊瑚或杏桃色，在眼下與鼻頭處做圓向暈染，看起來像被太陽曬過的紅潤。"
-                    makeup_point = "<b>眼影：</b>使用低飽和的暖大地色。重點在於強調纖長分明的睫毛。<br><b>唇膏：</b>透明感極強的水光唇釉，或是帶橘調的變色唇膏，打造飽滿豐潤感。"
-                else:
-                    style_name = "冷感氛圍的韓式開水妝"
-                    style_desc = "圓臉配冷皮最適合走清冷、精緻的路線。減少顏色的複雜度，重點在於讓皮膚顯得極致乾淨、剔透。"
-                    makeup_base = "<b>底妝：</b>乾淨的水光感底妝。建議使用紫色飾底乳校正黃氣。<br><b>腮紅：</b>選用牛奶粉或淡紫色的『膨脹色』腮紅，打在面中蘋果肌處，讓臉型瞬間立體消腫。"
-                    makeup_point = "<b>眼影：</b>消腫色眼影（如藕粉色）平鋪。強調臥蠶的立體度。<br><b>唇膏：</b>帶有漿果調或玫瑰色的染唇液，由內向外暈染成自然的咬唇妝。"
-            else:
-                style_name = "精緻迷人的韓系女團風"
-                style_desc = "您的臉型比例極佳，是典型的上鏡臉。妝容的核心在於強調『視覺中心點』，讓五官更加明豔動人。"
-                makeup_base = "<b>底妝：</b>無瑕的半霧面質感。在面中三角區做重點提亮。<br><b>修容：</b>自然的鼻影過度與側影，重點修飾出下巴的線條感。"
-                makeup_point = "<b>眼影：</b>加強大顆粒的偏光亮片點綴在眼窩中央。睫毛要強調『束狀感』。<br><b>唇膏：</b>飽滿的鏡面純釉。草莓粉或櫻桃色都能完美襯托您的氣場。"
-
-            # =================介面顯示 =================
+            # ================= 介面顯示 =================
             st.markdown(f"<style>.stApp {{ background-color: {theme_bg}; }}</style>", unsafe_allow_html=True)
             col_img, col_info = st.columns([1, 1.2])
+            
             with col_img:
                 st.image(image, use_column_width=True) 
+            
             with col_info:
                 st.markdown(f"""
                 <div class="stCard">
@@ -133,14 +127,21 @@ if uploaded_file:
                     <b style="font-size: 18px;">{tone_type}</b><br>
                     <span class="badge" style="background-color: #555;">{face_shape.split(' ')[0]}</span> 
                     <b style="font-size: 18px;">{face_shape}</b>
+                    
                     <div style="margin-top:15px; padding-top:15px; border-top: 1px solid #eee;">
                         <p style="font-size: 14px; line-height: 1.6; color: #555;">{shape_advice}</p>
+                    </div>
+
+                    <div class="makeup-card" style="border-left: 5px solid {theme_color};">
+                        <b style="color: #333; font-size: 15px;">💄 適合您的妝容</b><br>
+                        <span style="font-size: 14px; color: {theme_color}; font-weight: bold;">{quick_makeup}</span><br>
+                        <p style="font-size: 13px; color: #666; margin: 0; line-height:1.4;">{makeup_tip}</p>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
             st.divider()
-            tab1, tab2, tab3, tab4 = st.tabs(["🎨 色彩建議", "📐 造型思路", "💄 妝容解析", "💍 配飾指南"])
+            tab1, tab2, tab3 = st.tabs(["🎨 色彩建議", "📐 造型思路", "💍 配飾指南"])
 
             with tab1:
                 st.markdown(f"#### ✅ 推薦顯白色 <small style='color:#888'>Best Colors</small>", unsafe_allow_html=True)
@@ -163,36 +164,28 @@ if uploaded_file:
                 st.markdown(f"<div class='avoid-reason'>{avoid_tips}</div>", unsafe_allow_html=True)
 
             with tab2:
-                st.markdown(f"#### ✨ 專屬風格建議：{style_name}")
-                st.write(style_desc)
+                st.markdown(f"#### ✨ 專屬變美思路")
+                st.write(f"綜合您的臉型特徵與膚色調性，建議妝容重點在於提升肌膚的透亮感，並透過修容細微調整比例。")
                 st.info(f"💡 給您的專屬 Tip：{shape_advice}")
 
             with tab3:
-                st.markdown(f"#### 💄 變美思路解析")
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.markdown(f"<div class='stCard'>{makeup_base}</div>", unsafe_allow_html=True)
-                with c2:
-                    st.markdown(f"<div class='stCard'>{makeup_point}</div>", unsafe_allow_html=True)
-
-            with tab4:
-                metal = "金色、黃銅、玫瑰金" if is_warm else "銀色、白金、珍珠"
-                metal_tips = "您的膚色在暖色調金屬的襯托下會顯得更有神采。" if is_warm else "冷色調的金屬能讓您的膚色看起來更加通透、有透明感。"
+                metal = "金色、玫瑰金" if is_warm else "銀色、白金、珍珠"
+                metal_tips = "您的膚色在暖色調金屬襯托下會更顯貴氣。" if is_warm else "冷色調金屬能讓您的肌膚看起來更淨透。"
                 
                 if "方臉" in face_shape:
-                    glasses = "大圓框、水滴形框"; g_tips = "用圓潤的鏡框線條來平衡下顎的硬朗感。"
+                    glasses = "大圓框、橢圓形框"; g_tips = "用圓潤的鏡框線條來平衡下顎的硬感。"
                 elif "圓臉" in face_shape:
-                    glasses = "方框、貓眼框"; g_tips = "利用鏡框的幾何線條，在視覺上拉長臉型。"
+                    glasses = "方框、貓眼框"; g_tips = "利用鏡框的線條感來增加臉部稜角。"
                 elif "長臉" in face_shape:
-                    glasses = "寬大的粗框、大方框"; g_tips = "選擇有存在感的鏡框，能有效截斷長臉的視覺感。"
+                    glasses = "寬大框、大方框"; g_tips = "增加臉部的橫向面積，縮短臉部長度。"
                 else:
-                    glasses = "百搭款 (多邊形框)"; g_tips = "您的臉型不需要刻意修飾，各種流行鏡框皆可嘗試。"
+                    glasses = "各類流行框型皆可"; g_tips = "鵝蛋臉具備完美比例，大膽嘗試各式風格吧。"
 
                 ac1, ac2 = st.columns(2)
                 with ac1:
-                    st.markdown(f"<div class='stCard'><b>飾品選色指南</b><br><br><span style='font-size: 18px; color:{theme_color};'><b>{metal}</b></span><br><br>{metal_tips}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='stCard'><b>首飾材質建議</b><br><br><span style='font-size: 18px; color:{theme_color};'><b>{metal}</b></span><br><br>{metal_tips}</div>", unsafe_allow_html=True)
                 with ac2:
-                    st.markdown(f"<div class='stCard'><b>顯瘦鏡框推薦</b><br><br><span style='font-size: 18px;'><b>{glasses}</b></span><br><br>{g_tips}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='stCard'><b>修飾鏡框推薦</b><br><br><span style='font-size: 18px;'><b>{glasses}</b></span><br><br>{g_tips}</div>", unsafe_allow_html=True)
 
         else:
-            st.error("❌ 無法偵測到臉部，請使用正面清晰且無遮擋的照片重試。")
+            st.error("❌ 無法偵測到臉部，請確保照片光線充足且臉部完整無遮擋。")
