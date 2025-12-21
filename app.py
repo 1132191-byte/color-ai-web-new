@@ -216,7 +216,7 @@ else:
                 
                 with col_img:
                     # 顯示圖片 (現在這裡一定會有東西！)
-                    st.image(annotated_image, use_container_width=True)
+                    st.image(annotated_image, use_column_width=True)
                 
                 with col_info:
                     st.markdown(f"""
